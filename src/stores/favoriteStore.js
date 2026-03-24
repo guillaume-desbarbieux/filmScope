@@ -1,18 +1,18 @@
 import { defineStore } from 'pinia'
-export const useFavoriteStore = defineStore('favorites', {
-  state: () => ({
-    favorites: []
-    }),
-  getters: {
-  isFavorite: (state) => (id) => state.favorites.includes(id)},
-  actions: {
-    toggleFavorite(id) {
-      if (this.favorites.includes(id)) {
-        this.favorites = this.favorites.filter((f) => f !== id)
-      }
-      else {
-        this.favorites.push(id)
-      }
+import { ref, computed } from 'vue'
+
+export const useFavoriteStore = defineStore('favorites', () => {
+  const favorites = ref([])
+
+  const isFavorite = (id) => favorites.value.includes(id)
+
+  function toggleFavorite(id) {
+    if (favorites.value.includes(id)) {
+      favorites.value = favorites.value.filter((f) => f !== id)
+    } else {
+      favorites.value.push(id)
     }
   }
+
+  return { favorites, isFavorite, toggleFavorite }
 })

@@ -17,7 +17,7 @@ const favoriteFilms = computed(() => films.filter((film) => favorites.isFavorite
     :key="film.id"
     :film="film"
     :isFavorite="true"
-    @toggle-favorite="(film) => favorites.toggleFavorite(film.id)"
+    @toggle-favorite="() => favorites.toggleFavorite(film.id)"
   />
 
   <div v-if="favoriteFilms.length === 0">No favorite films yet.</div>
