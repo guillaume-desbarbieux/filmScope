@@ -8,7 +8,6 @@ export const useFilmStore = defineStore('films', {
         year: 2000,
         poster_url: 'https://placehold.co/300x100/orange/white?text=A+new+hope',
         rating: 5.3,
-        isFavorite: false,
       },
       {
         id: 2,
@@ -16,7 +15,6 @@ export const useFilmStore = defineStore('films', {
         year: 2001,
         poster_url: 'https://placehold.co/300x100/orange/white?text=The+empire+strikes+back',
         rating: 8.2,
-        isFavorite: false,
       },
       {
         id: 3,
@@ -24,7 +22,6 @@ export const useFilmStore = defineStore('films', {
         year: 2003,
         poster_url: 'https://placehold.co/300x100/orange/white?text=Return+of+the+Jedi',
         rating: 7.8,
-        isFavorite: false,
       },
     ],
   }),
