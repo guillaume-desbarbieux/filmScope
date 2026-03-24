@@ -1,5 +1,10 @@
 App.vue
 │
-├── SearchBar.vue   (props: none, emits: 'update:modelValue')
+├── SearchBar.vue
+│   =>  props:  none,
+│   <=  emits:  'update:modelValue'
 │
-└── FilmCard.vue [] (props: film, emits: 'add-favorite', 'goToDetails')
+└── FilmCard.vue []
+    =>  props:  film,
+    <=  emits:  'add-favorite',
+                'goToDetails'
