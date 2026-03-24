@@ -1,18 +1,28 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 export const useFavoriteStore = defineStore('favorites', () => {
   const favorites = ref([])
 
-  const isFavorite = (id) => favorites.value.includes(id)
-
-  function toggleFavorite(id) {
-    if (favorites.value.includes(id)) {
-      favorites.value = favorites.value.filter((f) => f !== id)
-    } else {
-      favorites.value.push(id)
-    }
+  function isFavorite(id) {
+    return favorites.value.includes(id)
   }
 
-  return { favorites, isFavorite, toggleFavorite }
+  function toggleFavorite(id) {
+    isFavorite(id)
+      ? (favorites.value = favorites.value.filter((f) => f !== id))
+      : favorites.value.push(id)
+    _persist()
+  }
+
+  function initStore() {
+    const saved = localStorage.getItem('filmscope-favorites')
+    if (saved) favorites.value = JSON.parse(saved)
+  }
+
+  function _persist() {
+    localStorage.setItem('filmscope-favorites', JSON.stringify(favorites.value))
+  }
+
+  return { favorites, isFavorite, toggleFavorite, initStore }
 })

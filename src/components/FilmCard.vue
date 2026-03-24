@@ -14,11 +14,10 @@ const props = defineProps({
     default: false,
   },
 })
-const emit = defineEmits(['toggleFavorite'])
-const router = useRouter()
 
+const router = useRouter()
 function toggleFavorite() {
-  emit('toggleFavorite', props.film)
+  favoriteStore.toggleFavorite(props.film.id)
 }
 function goToDetail() {
   router.push(`/film/${props.film.id}`)
