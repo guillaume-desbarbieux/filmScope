@@ -2,12 +2,14 @@
 import { onMounted, ref } from 'vue'
 import FilmCard from '@/components/FilmCard.vue'
 import SearchBar from '@/components/SearchBar.vue'
-import { getPopularFilms, searchFilms } from '@/services/tmdbService'
+import { getPopularFilms, searchFilms, discoverMedia } from '@/services/tmdbService'
 
 const films = ref([])
 const isLoading = ref(false)
 const error = ref(null)
 const searchQuery = ref('')
+const hasActiveFilters = ref(false)
+const resultsLabel = ref('')
 
 async function load(fetchFn) {
   isLoading.value = true
@@ -21,30 +23,52 @@ async function load(fetchFn) {
   }
 }
 
-async function search(query) {
+async function search({ query, mediaType, genreIds, decade, language, minRating }) {
   searchQuery.value = query
-  query ? await load(() => searchFilms(query)) : await load(getPopularFilms)
+  const isFiltered = mediaType || genreIds?.length > 0 || decade || language || minRating !== null
+  hasActiveFilters.value = isFiltered
+
+  if (query) {
+    // Recherche textuelle → /search/multi (ignore les filtres discover)
+    await load(() => searchFilms(query))
+    resultsLabel.value = `${films.value.length} résultat${films.value.length !== 1 ? 's' : ''} pour « ${query} »`
+  } else if (isFiltered) {
+    // Filtres sans texte → /discover
+    await load(() =>
+      discoverMedia({
+        mediaType: mediaType || 'movie',
+        genreIds: genreIds || [],
+        decade,
+        language,
+        minRating,
+      }),
+    )
+    resultsLabel.value = `${films.value.length} résultat${films.value.length !== 1 ? 's' : ''} avec vos filtres`
+  } else {
+    // Aucun filtre → populaires
+    await load(getPopularFilms)
+    resultsLabel.value = `${films.value.length} films populaires`
+  }
 }
 
-onMounted(() => load(getPopularFilms))
+onMounted(async () => {
+  await load(getPopularFilms)
+  resultsLabel.value = `${films.value.length} films populaires`
+})
 </script>
 
 <template>
   <main>
     <div class="toolbar">
       <SearchBar @search="search" />
-      <span class="results-count">
-        <template v-if="searchQuery">
-          {{ films.length }} résultat{{ films.length !== 1 ? 's' : '' }} pour « {{ searchQuery }} »
-        </template>
-        <template v-else> {{ films.length }} films populaires </template>
-      </span>
+      <span class="results-count">{{ resultsLabel }}</span>
     </div>
 
     <div v-if="isLoading" class="state-msg">Chargement...</div>
     <div v-else-if="error" class="state-msg error">Erreur de chargement.</div>
     <div v-else-if="films.length === 0" class="state-msg">
-      Aucun résultat pour « {{ searchQuery }} »
+      <template v-if="searchQuery">Aucun résultat pour « {{ searchQuery }} »</template>
+      <template v-else>Aucun résultat avec ces filtres.</template>
     </div>
 
     <div v-else class="films-list">
