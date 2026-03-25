@@ -1,3 +1,21 @@
+<script setup>
+import { useRoute, useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useFavoriteStore } from '@/stores/favoriteStore'
+import {getFilmDetails} from '@/services/tmdbService.js'
+
+const route = useRoute()
+const router = useRouter()
+const favoriteStore = useFavoriteStore()
+const film = ref(null)
+
+function toggleFavorite() {
+  favoriteStore.toggleFavorite(film.value.id)
+}
+
+onMounted(() => getFilmDetails(route.params.id).then(data => film.value = data))
+</script>
+
 <template>
   <div class="film-detail">
     <button class="back-btn" @click="router.back()">← Retour</button>
@@ -31,31 +49,6 @@
   </div>
 </template>
 
-<script setup>
-import { useRoute, useRouter } from 'vue-router'
-import { ref, watch } from 'vue'
-import { useFilmStore } from '@/stores/filmStore'
-import { useFavoriteStore } from '@/stores/favoriteStore'
-
-const route = useRoute()
-const router = useRouter()
-const filmStore = useFilmStore()
-const favoriteStore = useFavoriteStore()
-const film = ref(null)
-
-watch(
-  () => filmStore.films,
-  (films) => {
-    const id = Number(route.params.id)
-    film.value = films.find((f) => f.id === id) ?? null
-  },
-  { immediate: true },
-)
-
-function toggleFavorite() {
-  favoriteStore.toggleFavorite(film.value.id)
-}
-</script>
 <style scoped>
 .film-detail {
   padding: 2rem;

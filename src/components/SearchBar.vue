@@ -1,27 +1,41 @@
 <script setup>
-defineProps({
-  modelValue: {
-    type: String,
-    default: '',
-  },
-})
-defineEmits(['update:modelValue'])
+import { ref } from 'vue'
+
+const emit = defineEmits(['search'])
+const query = ref('')
+
+let debounceTimer = null
+
+function onInput(value) {
+  query.value = value
+  clearTimeout(debounceTimer)
+  debounceTimer = setTimeout(() => emit('search', value.trim()), 400)
+}
+
+function reset() {
+  query.value = ''
+  clearTimeout(debounceTimer)
+  emit('search', '')
+}
 </script>
 
+
 <template>
-  <div class="search-bar" :class="{ active: modelValue.length > 0 }">
+  <div class="search-bar" :class="{ active: query.length > 0 }">
     <span class="search-icon">⌕</span>
     <input
       type="search"
-      :value="modelValue"
+      :value="query"
       placeholder="Rechercher un film..."
-      @input="$emit('update:modelValue', $event.target.value)"
+      @input="onInput($event.target.value)"
     />
-    <button v-if="modelValue.length > 0" class="reset-btn" @click="$emit('update:modelValue', '')">
+    <button v-if="query.length > 0" class="reset-btn" @click="reset">
       Effacer
     </button>
   </div>
 </template>
+
+
 <style scoped>
 .search-bar {
   display: flex;
