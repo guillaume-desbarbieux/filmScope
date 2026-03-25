@@ -16,6 +16,7 @@ const props = defineProps({
 })
 
 const router = useRouter()
+
 function toggleFavorite() {
   favoriteStore.toggleFavorite(props.film.id)
 }

@@ -54,16 +54,6 @@ onMounted(() => load(getPopularFilms))
 </template>
 
 <style scoped>
-.films-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  padding: 0 2rem 2rem;
-}
-
-main {
-  padding: 2rem;
-}
 .toolbar {
   display: flex;
   align-items: center;
@@ -77,14 +67,5 @@ main {
   text-transform: uppercase;
   color: var(--c-muted);
   white-space: nowrap;
-}
-.state-msg {
-  font-size: 0.88rem;
-  color: var(--c-muted);
-  padding: 3rem 0;
-  text-align: center;
-}
-.state-msg.error {
-  color: #e05a5a;
 }
 </style>

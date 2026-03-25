@@ -90,31 +90,6 @@ watch(
   padding: 2rem;
   max-width: 860px;
 }
-
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: none;
-  border: 0.5px solid var(--c-border);
-  border-radius: 6px;
-  color: var(--c-muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 6px 14px;
-  cursor: pointer;
-  margin-bottom: 2rem;
-  transition:
-    border-color 0.2s,
-    color 0.2s;
-}
-.back-btn:hover {
-  border-color: var(--c-amber);
-  color: var(--c-text);
-}
-
 .detail-layout {
   display: flex;
   gap: 2.5rem;
@@ -136,34 +111,12 @@ watch(
 .info {
   flex: 1;
 }
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.8rem;
-  font-weight: 600;
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
-}
 
 .badges {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   margin-bottom: 1.5rem;
-}
-.badge {
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  border-radius: 20px;
-  padding: 3px 10px;
-}
-.badge-amber {
-  background: var(--c-amber-dim);
-  color: var(--c-amber);
-}
-.badge-outline {
-  border: 0.5px solid var(--c-border);
-  color: var(--c-muted);
 }
 
 .overview {
@@ -178,52 +131,5 @@ h1 {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-}
-.btn-primary {
-  background: var(--c-amber);
-  color: #0d0d0f;
-  border: none;
-  border-radius: 6px;
-  text-decoration: none;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-weight: 500;
-  padding: 8px 20px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  transition: opacity 0.2s;
-}
-.btn-primary:hover {
-  opacity: 0.85;
-}
-.btn-secondary {
-  background: none;
-  border: 0.5px solid var(--c-border);
-  border-radius: 6px;
-  color: var(--c-muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 8px 20px;
-  cursor: pointer;
-  transition:
-    border-color 0.2s,
-    color 0.2s;
-}
-.btn-secondary:hover {
-  border-color: var(--c-amber);
-  color: var(--c-text);
-}
-
-.films-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  padding: 0 2rem 2rem;
 }
 </style>
