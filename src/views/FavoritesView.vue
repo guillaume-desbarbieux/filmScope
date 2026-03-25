@@ -12,11 +12,9 @@ const favoriteFilms = computed(() => films.filter((film) => favorites.isFavorite
 
 <template>
   <h1>My Favorites</h1>
-  <FilmCard
-    v-for="film in favoriteFilms"
-    :key="film.id"
-    :film="film"
-  />
-
   <div v-if="favoriteFilms.length === 0">No favorite films yet.</div>
+  <div v-else-if="favoriteFilms.length === 1">1 favorite film</div>
+  <div v-else>{{ favoriteFilms.length }} favorites films</div>
+
+  <FilmCard v-for="film in favoriteFilms" :key="film.id" :film="film" />
 </template>
