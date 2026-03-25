@@ -1,28 +1,31 @@
 import { defineStore } from 'pinia'
-export const useFilmStore = defineStore('films', {
-  state: () => ({
-    films: [
-      {
-        id: 1,
-        title: 'A New Hope',
-        year: 2000,
-        poster_url: 'https://placehold.co/300x100/orange/white?text=A+new+hope',
-        rating: 5.3,
-      },
-      {
-        id: 2,
-        title: 'The Empire Strikes Back',
-        year: 2001,
-        poster_url: 'https://placehold.co/300x100/orange/white?text=The+empire+strikes+back',
-        rating: 8.2,
-      },
-      {
-        id: 3,
-        title: 'Return of the Jedi',
-        year: 2003,
-        poster_url: 'https://placehold.co/300x100/orange/white?text=Return+of+the+Jedi',
-        rating: 7.8,
-      },
-    ],
-  }),
+import { ref } from 'vue'
+import axios from 'axios'
+
+const apiKey = import.meta.env.VITE_TMDB_API_KEY
+
+export const useFilmStore = defineStore('films', () => {
+  const films = ref([])
+  const isLoading = ref(false)
+  const error = ref(null)
+
+  async function fetchPopularFilms() {
+    isLoading.value = true
+    try {
+      const response = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}`)
+      films.value = response.data.results.map((film) => ({
+        id: film.id,
+        title: film.title,
+        year: new Date(film.release_date).getFullYear(),
+        poster_url: `https://image.tmdb.org/t/p/w300${film.poster_path}`,
+        rating: film.vote_average,
+        overview: film.overview,
+      }))
+    } catch (e) {
+      error.value = e
+    } finally {
+      isLoading.value = false
+    }
+  }
+return { films, isLoading, error, fetchPopularFilms }
 })
