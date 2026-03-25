@@ -58,3 +58,8 @@ export async function getSimilarFilms(id) {
   const {data} = await api.get(`/movie/${id}/similar`)
   return data.results.map(mapFilm)
 }
+
+export async function getBestRatedFilms() {
+  const {data} = await api.get('/movie/top_rated')
+  return data.results.map(mapFilm)
+}
