@@ -39,6 +39,25 @@ function mapFilm(film) {
     overview: film.overview,
   }
 }
+
+function mapFilmDetails(film) {
+  return{
+    ...mapFilm(film),
+    tagline: film.tagline || null,
+    release_date: film.release_date || null,
+    runtime: film.runtime || null,
+    genres: film.genres?.map((g) => g.name) ?? [],
+    vote_count: film.vote_count ?? null,
+    budget: film.budget || null,
+    revenue: film.revenue || null,
+    original_language: film.original_language || null,
+    spoken_languages: film.spoken_languages?.map((l) => l.name) ?? [],
+    production_countries: film.production_countries?.map((c) => c.name) ?? [],
+    homepage: film.homepage || null,
+    poster_url_lg: film.poster_path ? `https://image.tmdb.org/t/p/w500${film.poster_path}` : null,
+
+  }
+}
 export async function getPopularFilms() {
   const {data} = await api.get('/movie/popular')
   return data.results.map(mapFilm)
@@ -46,7 +65,7 @@ export async function getPopularFilms() {
 
 export async function getFilmDetails(id) {
   const {data} = await api.get(`/movie/${id}`)
-  return mapFilm(data)
+  return mapFilmDetails(data)
 }
 
 export async function searchFilms(query) {
