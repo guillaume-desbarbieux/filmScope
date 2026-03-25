@@ -25,7 +25,7 @@ function goToDetail() {
 </script>
 
 <template>
-  <div class="film-card">
+  <div class="film-card" @click="goToDetail">
     <div class="poster-wrap">
       <img :src="film.poster_url" :alt="film.title" />
       <button class="fav-btn" @click.stop="toggleFavorite">
@@ -38,7 +38,6 @@ function goToDetail() {
         <span class="year">{{ film.year }}</span>
         <span class="rating">★ {{ film.rating }}</span>
       </div>
-      <button class="detail-btn" @click="goToDetail">Détails</button>
     </div>
   </div>
 </template>
@@ -115,26 +114,5 @@ h2 {
   color: var(--c-amber);
   padding: 2px 7px;
   border-radius: 20px;
-}
-
-.detail-btn {
-  width: 100%;
-  background: none;
-  border: 0.5px solid var(--c-border);
-  border-radius: 6px;
-  color: var(--c-muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 5px 0;
-  cursor: pointer;
-  transition:
-    border-color 0.2s,
-    color 0.2s;
-}
-.detail-btn:hover {
-  border-color: var(--c-amber);
-  color: var(--c-text);
 }
 </style>

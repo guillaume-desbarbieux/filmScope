@@ -24,10 +24,9 @@ onMounted(async() => {
 </script>
 
 <template>
-  <h1>My Favorites</h1>
-  <div v-if="films.length === 0">No favorite films yet.</div>
-  <div v-else-if="films.length === 1">1 favorite film</div>
-  <div v-else>{{ films.length }} favorites films</div>
+  <div v-if="films.length === 0">Vous n'avez pas encore de favori.</div>
+  <div v-else-if="films.length === 1">Votre seul et unique favori</div>
+  <div v-else> Vous avez {{ films.length }} favoris !</div>
   <div class="films-list">
     <FilmCard v-for="film in films" :key="film.id" :film="film" />
   </div>
