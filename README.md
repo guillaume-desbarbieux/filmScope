@@ -99,3 +99,45 @@ Le thème repose sur des variables CSS définies dans `main.css` :
 | `--c-muted`       | Texte secondaire             |
 | `--c-amber`       | Couleur d'accent             |
 | `--c-amber-dim`   | Accent avec transparence     |
+
+
+## Arbre de Composants
+```
+App.vue
+│
+├── AppNavBar.vue
+│
+└── RouterView 
+    │
+    ├── HomeView
+    │   │
+    │   ├── SearchBar
+    │   │           =>  props: none
+    │   │           <=  emits: @search
+    │   │
+    │   ├── FilmGrid.vue
+    │   │   │       =>  props:  :films, :isLoading, :error, :searchQuery
+    │   │   │       <=  emits:  film-click
+    │   │   │
+    │   │   └── FilmCard.vue
+    │   │       │       =>  props:  :film
+    │   │       │       <=  emits:  @film-click
+    │   │       │
+    │   │       └── favoriteStore.js    [Pinia]
+    │   │                   <=  export: useFavoriteStore() =>  { favorites, isFavorite(), toggleFavorite(), initStore() }
+    │   │
+    │   └── tmdbService.js      [axios]
+    │               <=  export:  getPopular, getFilmDetails, searchFilms, getSimilarFilms, getBestRatedFilms, discoverMedia, getRecommendationsFromFavorites
+    │
+    ├── FilmDetailView
+    │   │       =>  props:  :mediaType (injecté par le router)
+    │   │ 
+    │   ├── FilmGrid.vue
+    │   ├── tmdbService.js
+    │   └── favoriteStore.js
+    │
+    └── FavoritesView
+        ├── FilmGrid.vue
+        ├── tmdbService.js
+        └── favoriteStore.js
+```
