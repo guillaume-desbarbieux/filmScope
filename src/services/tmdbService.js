@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://api.themoviedb.org/3',
+  baseURL: import.meta.env.VITE_TMDB_BASE_URL,
   params: {
     api_key: import.meta.env.VITE_TMDB_API_KEY,
     language: 'fr-FR',
@@ -37,7 +37,9 @@ function mapFilm(film) {
       film.release_date || film.first_air_date
         ? new Date(film.release_date || film.first_air_date).getFullYear()
         : '--',
-    poster_url: film.poster_path ? `https://image.tmdb.org/t/p/w300${film.poster_path}` : null,
+    poster_url: film.poster_path
+      ? `${import.meta.env.VITE_TMDB_IMAGE_URL}${film.poster_path}`
+      : null,
     rating: film.vote_average,
     overview: film.overview,
     media_type: film.media_type || (film.title ? 'movie' : 'tv'),
