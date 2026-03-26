@@ -3,7 +3,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { ref, computed, watch } from 'vue'
 import { useFavoriteStore } from '@/stores/favoriteStore'
 import { getFilmDetails, getSimilarFilms } from '@/services/tmdbService.js'
-import FilmCard from '@/components/FilmCard.vue'
 import FilmGrid from '@/components/FilmGrid.vue'
 
 const props = defineProps({

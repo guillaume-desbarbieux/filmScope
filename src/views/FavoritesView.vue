@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import { useFavoriteStore } from '@/stores/favoriteStore'
-import FilmCard from '@/components/FilmCard.vue'
 import {
   getFilmDetails,
   getRecommendationsFromFavorites,
