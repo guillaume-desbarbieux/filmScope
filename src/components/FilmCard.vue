@@ -1,37 +1,33 @@
 <script setup>
-import { useRouter } from 'vue-router'
 import { useFavoriteStore } from '@/stores/favoriteStore.js'
-
 const favoriteStore = useFavoriteStore()
-
 const props = defineProps({
   film: {
     type: Object,
     required: true,
   },
-  isFavorite: {
-    type: Boolean,
-    default: false,
-  },
 })
 
-const router = useRouter()
+const emit = defineEmits(['film-click'])
 
 function toggleFavorite() {
   favoriteStore.toggleFavorite(props.film.id)
-}
-function goToDetail() {
-  const type = props.film.media_type === 'tv' ? 'tv' : 'film'
-  router.push(`/${type}/${props.film.id}`)
 }
 
 const ratingFormatted = (r) => {
   return r != null ? r.toFixed(1) : null
 }
+
+function emitClick(f) {
+  emit('film-click', {
+    id: f.id,
+    media_type: f.media_type,
+  })
+}
 </script>
 
 <template>
-  <div class="film-card" @click="goToDetail">
+  <div class="film-card" @click="emitClick(film)">
     <div class="poster-wrap">
       <img :src="film.poster_url" :alt="film.title" />
       <button class="fav-btn" @click.stop="toggleFavorite">

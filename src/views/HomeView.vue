@@ -1,9 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import FilmCard from '@/components/FilmCard.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import { getPopularFilms, searchFilms, discoverMedia } from '@/services/tmdbService'
+import FilmGrid from '@/components/FilmGrid.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const films = ref([])
 const isLoading = ref(false)
 const error = ref(null)
@@ -30,7 +32,7 @@ async function search({ query, mediaType, genreIds, decade, language, minRating,
 
   if (query) {
     // Recherche textuelle → /search/multi (ignore les filtres discover)
-   await load(() => searchFilms(query))
+    await load(() => searchFilms(query))
     resultsLabel.value = `${films.value.length} résultat${films.value.length !== 1 ? 's' : ''} pour « ${query} »`
   } else if (hasActiveFilters.value) {
     // Filtres sans texte → /discover
@@ -62,6 +64,11 @@ onMounted(async () => {
   await load(getPopularFilms)
   resultsLabel.value = `${films.value.length} films populaires`
 })
+
+function goToDetail(f) {
+  const type = f.media_type === 'tv' ? 'tv' : 'film'
+  router.push(`/${type}/${f.id}`)
+}
 </script>
 
 <template>
@@ -70,17 +77,7 @@ onMounted(async () => {
       <SearchBar @search="search" />
       <span class="results-count">{{ resultsLabel }}</span>
     </div>
-
-    <div v-if="isLoading" class="state-msg">Chargement...</div>
-    <div v-else-if="error" class="state-msg error">Erreur de chargement.</div>
-    <div v-else-if="films.length === 0" class="state-msg">
-      <template v-if="searchQuery">Aucun résultat pour « {{ searchQuery }} »</template>
-      <template v-else>Aucun résultat avec ces filtres.</template>
-    </div>
-
-    <div v-else class="films-list">
-      <FilmCard v-for="film in films" :key="film.id" :film="film" />
-    </div>
+    <FilmGrid :films="films" :isLoading="isLoading" :error="error" :searchQuery="searchQuery" @film-click="goToDetail($event)" />
   </main>
 </template>
 
