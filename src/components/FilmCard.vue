@@ -1,6 +1,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useFavoriteStore } from '@/stores/favoriteStore.js'
+import { computed } from 'vue'
 
 const favoriteStore = useFavoriteStore()
 
@@ -24,6 +25,10 @@ function goToDetail() {
   const type = props.film.media_type === 'tv' ? 'tv' : 'film'
   router.push(`/${type}/${props.film.id}`)
 }
+
+const ratingFormatted = (r) => {
+  return r != null ? r.toFixed(1) : null
+}
 </script>
 
 <template>
@@ -38,7 +43,8 @@ function goToDetail() {
       <h2>{{ film.title }}</h2>
       <div class="meta">
         <span class="year">{{ film.year }}</span>
-        <span class="rating">★ {{ film.rating }}</span>
+        <span class="rating">★ {{ ratingFormatted(film.rating) }}</span>
+        <span class="media">{{ film.media_type }}</span>
       </div>
     </div>
   </div>
@@ -116,5 +122,10 @@ h2 {
   color: var(--c-amber);
   padding: 2px 7px;
   border-radius: 20px;
+}
+
+.media {
+  font-size: 0.65rem;
+  color: var(--c-muted);
 }
 </style>
