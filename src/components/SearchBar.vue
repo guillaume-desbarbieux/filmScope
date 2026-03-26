@@ -245,7 +245,7 @@ watch([selectedDecade, selectedLanguage, selectedMinRating], () => {
           class="chip"
           :class="{ 'chip--active': selectedSort === s.value }"
           @click="
-            selectedSort = s.value,
+            selectedSort = s.value;
             emitSearch()
           "
         >
