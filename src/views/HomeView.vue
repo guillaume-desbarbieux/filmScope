@@ -1,13 +1,17 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import FilmCard from '@/components/FilmCard.vue'
 import SearchBar from '@/components/SearchBar.vue'
-import { getPopularFilms, searchFilms } from '@/services/tmdbService'
+import { getPopularFilms, searchFilms, discoverMedia } from '@/services/tmdbService'
+import FilmGrid from '@/components/FilmGrid.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const films = ref([])
 const isLoading = ref(false)
 const error = ref(null)
 const searchQuery = ref('')
+const hasActiveFilters = ref(false)
+const resultsLabel = ref('')
 
 async function load(fetchFn) {
   isLoading.value = true
@@ -21,49 +25,73 @@ async function load(fetchFn) {
   }
 }
 
-async function search(query) {
+async function search({ query, mediaType, genreIds, decade, language, minRating, sort }) {
   searchQuery.value = query
-  query ? await load(() => searchFilms(query)) : await load(getPopularFilms)
+  hasActiveFilters.value =
+    mediaType !== null ||
+    genreIds?.length > 0 ||
+    decade !== null ||
+    language !== null ||
+    minRating !== null
+
+  if (query) {
+    // Recherche textuelle → /search/multi (ignore les filtres discover)
+    await load(() => searchFilms(query))
+    resultsLabel.value = `${films.value.length} résultat${films.value.length !== 1 ? 's' : ''} pour « ${query} »`
+  } else if (hasActiveFilters.value) {
+    // Filtres sans texte → /discover
+    await load(() =>
+      discoverMedia({
+        mediaType: mediaType || 'movie',
+        genreIds: genreIds || [],
+        decade,
+        language,
+        minRating,
+      }),
+    )
+    resultsLabel.value = `${films.value.length} résultat${films.value.length !== 1 ? 's' : ''} avec vos filtres`
+  } else {
+    // Aucun filtre → populaires
+    await load(getPopularFilms)
+    resultsLabel.value = `${films.value.length} films populaires`
+  }
+
+  films.value.sort((a, b) => {
+    if (sort === 'rating') return b.rating - a.rating
+    if (sort === 'year') return b.year - a.year
+    if (sort === 'title') return a.title.localeCompare(b.title)
+    return 0
+  })
 }
 
-onMounted(() => load(getPopularFilms))
+onMounted(async () => {
+  await load(getPopularFilms)
+  resultsLabel.value = `${films.value.length} films populaires`
+})
+
+function goToDetail(f) {
+  const type = f.media_type === 'tv' ? 'tv' : 'film'
+  router.push(`/${type}/${f.id}`)
+}
 </script>
 
 <template>
   <main>
     <div class="toolbar">
       <SearchBar @search="search" />
-      <span class="results-count">
-        <template v-if="searchQuery">
-          {{ films.length }} résultat{{ films.length !== 1 ? 's' : '' }} pour « {{ searchQuery }} »
-        </template>
-        <template v-else> {{ films.length }} films populaires </template>
-      </span>
+      <span class="results-count">{{ resultsLabel }}</span>
     </div>
-
-    <div v-if="isLoading" class="state-msg">Chargement...</div>
-    <div v-else-if="error" class="state-msg error">Erreur de chargement.</div>
-    <div v-else-if="films.length === 0" class="state-msg">
-      Aucun résultat pour « {{ searchQuery }} »
-    </div>
-
-    <div v-else class="films-list">
-      <FilmCard v-for="film in films" :key="film.id" :film="film" />
-    </div>
+    <FilmGrid
+      :films="films"
+      :isLoading="isLoading"
+      :error="error"
+      :searchQuery="searchQuery"
+      @film-click="goToDetail($event)"
+    />
   </main>
 </template>
 
 <style scoped>
-.films-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
-  padding: 0 2rem 2rem;
-}
-
-main {
-  padding: 2rem;
-}
 .toolbar {
   display: flex;
   align-items: center;
@@ -77,14 +105,5 @@ main {
   text-transform: uppercase;
   color: var(--c-muted);
   white-space: nowrap;
-}
-.state-msg {
-  font-size: 0.88rem;
-  color: var(--c-muted);
-  padding: 3rem 0;
-  text-align: center;
-}
-.state-msg.error {
-  color: #e05a5a;
 }
 </style>

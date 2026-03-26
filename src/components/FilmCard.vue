@@ -1,31 +1,33 @@
 <script setup>
-import { useRouter } from 'vue-router'
 import { useFavoriteStore } from '@/stores/favoriteStore.js'
-
 const favoriteStore = useFavoriteStore()
-
 const props = defineProps({
   film: {
     type: Object,
     required: true,
   },
-  isFavorite: {
-    type: Boolean,
-    default: false,
-  },
 })
 
-const router = useRouter()
+const emit = defineEmits(['film-click'])
+
 function toggleFavorite() {
   favoriteStore.toggleFavorite(props.film.id)
 }
-function goToDetail() {
-  router.push(`/film/${props.film.id}`)
+
+const ratingFormatted = (r) => {
+  return r != null ? r.toFixed(1) : null
+}
+
+function emitClick(f) {
+  emit('film-click', {
+    id: f.id,
+    media_type: f.media_type,
+  })
 }
 </script>
 
 <template>
-  <div class="film-card">
+  <div class="film-card" @click="emitClick(film)">
     <div class="poster-wrap">
       <img :src="film.poster_url" :alt="film.title" />
       <button class="fav-btn" @click.stop="toggleFavorite">
@@ -36,9 +38,9 @@ function goToDetail() {
       <h2>{{ film.title }}</h2>
       <div class="meta">
         <span class="year">{{ film.year }}</span>
-        <span class="rating">★ {{ film.rating }}</span>
+        <span class="rating">★ {{ ratingFormatted(film.rating) }}</span>
+        <span class="media">{{ film.media_type }}</span>
       </div>
-      <button class="detail-btn" @click="goToDetail">Détails</button>
     </div>
   </div>
 </template>
@@ -117,24 +119,8 @@ h2 {
   border-radius: 20px;
 }
 
-.detail-btn {
-  width: 100%;
-  background: none;
-  border: 0.5px solid var(--c-border);
-  border-radius: 6px;
+.media {
+  font-size: 0.65rem;
   color: var(--c-muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 5px 0;
-  cursor: pointer;
-  transition:
-    border-color 0.2s,
-    color 0.2s;
-}
-.detail-btn:hover {
-  border-color: var(--c-amber);
-  color: var(--c-text);
 }
 </style>
