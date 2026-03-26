@@ -1,6 +1,7 @@
 # FilmScope
 
 Application web de découverte de films et séries, construite avec Vue 3 et l'API TMDB.
+[En ligne ici](https://guillaume-desbarbieux.github.io/filmScope/)
 
 ## Stack
 
