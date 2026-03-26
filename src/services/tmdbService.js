@@ -176,7 +176,7 @@ export async function getRecommendationsFromFavorites(favoriteIds) {
   if (favoriteIds.length === 0) return getBestRatedFilms()
 
   const details = await Promise.all(
-    favoriteIds.slice(0, 50).map((id) =>
+    favoriteIds.slice(0, 40).map((id) =>
       api
         .get(`/movie/${id}`)
         .then((r) => r.data)

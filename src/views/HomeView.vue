@@ -25,14 +25,14 @@ async function load(fetchFn) {
 
 async function search({ query, mediaType, genreIds, decade, language, minRating }) {
   searchQuery.value = query
-  const isFiltered = mediaType || genreIds?.length > 0 || decade || language || minRating !== null
-  hasActiveFilters.value = isFiltered
+  hasActiveFilters.value =
+    mediaType || genreIds?.length > 0 || decade || language || minRating !== null
 
   if (query) {
     // Recherche textuelle → /search/multi (ignore les filtres discover)
     await load(() => searchFilms(query))
     resultsLabel.value = `${films.value.length} résultat${films.value.length !== 1 ? 's' : ''} pour « ${query} »`
-  } else if (isFiltered) {
+  } else if (hasActiveFilters.value) {
     // Filtres sans texte → /discover
     await load(() =>
       discoverMedia({

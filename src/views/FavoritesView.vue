@@ -3,6 +3,7 @@ import { ref, watch, computed } from 'vue'
 import { useFavoriteStore } from '@/stores/favoriteStore'
 import FilmCard from '@/components/FilmCard.vue'
 import {
+  getBestRatedFilms,
   getFilmDetails,
   getRecommendationsFromFavorites,
   MOVIE_GENRES,
@@ -80,7 +81,7 @@ watch(
 const suggestionLabel = computed(() => {
   if (topGenreNames.value.length > 0)
     return `Parce que vous aimez ${topGenreNames.value.join(' & ')}`
-  return 'Suggestions pour vous'
+  return 'Suggestions populaires'
 })
 </script>
 
