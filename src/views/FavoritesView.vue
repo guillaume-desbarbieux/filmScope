@@ -111,7 +111,7 @@ function goToDetail(f) {
             :films="films"
             :isLoading="isLoading"
             :error="error"
-            @film-click="goToDetail($event)"
+            @clickFilm="goToDetail($event)"
           />
         </div>
       </template>
@@ -133,7 +133,7 @@ function goToDetail(f) {
         <FilmGrid
           :films="suggestions"
           :isLoading="isSuggestionsLoading"
-          @film-click="goToDetail($event)"
+          @clickFilm="goToDetail($event)"
         />
       </div>
     </div>

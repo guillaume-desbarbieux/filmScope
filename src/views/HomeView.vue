@@ -86,7 +86,7 @@ function goToDetail(f) {
       :isLoading="isLoading"
       :error="error"
       :searchQuery="searchQuery"
-      @film-click="goToDetail($event)"
+      @clickFilm="goToDetail($event)"
     />
   </main>
 </template>

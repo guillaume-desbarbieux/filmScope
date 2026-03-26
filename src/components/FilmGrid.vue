@@ -20,7 +20,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['film-click'])
+const emit = defineEmits(['clickFilm'])
 </script>
 
 <template>
@@ -31,6 +31,11 @@ const emit = defineEmits(['film-click'])
     <template v-else>Aucun résultat avec ces filtres.</template>
   </div>
   <div v-else class="films-list">
-    <FilmCard v-for="film in props.films" :key="film.id" :film="film" @film-click="emit('film-click', $event)"/>
+    <FilmCard
+      v-for="film in props.films"
+      :key="film.id"
+      :film="film"
+      @clickFilm="emit('clickFilm', $event)"
+    />
   </div>
 </template>

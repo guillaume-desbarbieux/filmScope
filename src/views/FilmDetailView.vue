@@ -163,7 +163,7 @@ function goToDetail(f) {
       <div v-if="isLoading" class="state-msg">Chargement...</div>
       <div v-else-if="similarFilms.length === 0" class="state-msg">Aucun film similaire.</div>
       <div v-else class="films-list">
-        <FilmGrid :films="similarFilms" :isLoading="isLoading" @film-click="goToDetail($event)" />
+        <FilmGrid :films="similarFilms" :isLoading="isLoading" @clickFilm="goToDetail($event)" />
       </div>
     </div>
   </main>

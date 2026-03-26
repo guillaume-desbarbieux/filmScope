@@ -118,11 +118,11 @@ App.vue
     │   │
     │   ├── FilmGrid.vue
     │   │   │       =>  props:  :films, :isLoading, :error, :searchQuery
-    │   │   │       <=  emits:  film-click
+    │   │   │       <=  emits:  @clickFilm
     │   │   │
     │   │   └── FilmCard.vue
     │   │       │       =>  props:  :film
-    │   │       │       <=  emits:  @film-click
+    │   │       │       <=  emits:  @clickFilm
     │   │       │
     │   │       └── favoriteStore.js    [Pinia]
     │   │                   <=  export: useFavoriteStore() =>  { favorites, isFavorite(), toggleFavorite(), initStore() }
