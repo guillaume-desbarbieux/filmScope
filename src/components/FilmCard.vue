@@ -11,7 +11,7 @@ const props = defineProps({
 const emit = defineEmits(['clickFilm'])
 
 function toggleFavorite() {
-  favoriteStore.toggleFavorite(props.film.id)
+  favoriteStore.toggleFavorite(props.film)
 }
 
 const ratingFormatted = (r) => {

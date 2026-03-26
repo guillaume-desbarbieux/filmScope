@@ -4,14 +4,14 @@ import { ref } from 'vue'
 export const useFavoriteStore = defineStore('favorites', () => {
   const favorites = ref([])
 
-  function isFavorite(id) {
-    return favorites.value.includes(id)
+  function isFavorite(film) {
+    return favorites.value.some((f) => f.id === film.id && f.mediaType === film.mediaType)
   }
 
-  function toggleFavorite(id) {
-    isFavorite(id)
-      ? (favorites.value = favorites.value.filter((f) => f !== id))
-      : favorites.value.push(id)
+  function toggleFavorite(film) {
+    isFavorite(film)
+      ? (favorites.value = favorites.value.filter((f) => (f.id !== film.id || f.mediaType !== film.mediaType)))
+      : favorites.value.push({id:film.id, mediaType:film.mediaType})
     _persist()
   }
 

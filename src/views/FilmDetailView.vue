@@ -78,7 +78,7 @@ async function loadFilm(id) {
 }
 
 function toggleFavorite() {
-  favoriteStore.toggleFavorite(film.value.id)
+  favoriteStore.toggleFavorite(film)
 }
 
 watch(
