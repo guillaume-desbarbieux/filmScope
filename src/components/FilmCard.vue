@@ -1,7 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useFavoriteStore } from '@/stores/favoriteStore.js'
-import { computed } from 'vue'
 
 const favoriteStore = useFavoriteStore()
 

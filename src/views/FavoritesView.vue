@@ -3,7 +3,6 @@ import { ref, watch, computed } from 'vue'
 import { useFavoriteStore } from '@/stores/favoriteStore'
 import FilmCard from '@/components/FilmCard.vue'
 import {
-  getBestRatedFilms,
   getFilmDetails,
   getRecommendationsFromFavorites,
   MOVIE_GENRES,
