@@ -4,9 +4,18 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -15,12 +24,12 @@ jobs:
           node-version: 20
 
       - run: npm ci
+
       - run: npm run build
         env:
           VITE_TMDB_API_KEY: ${{ secrets.VITE_TMDB_API_KEY }}
           VITE_TMDB_API_URL: ${{ secrets.VITE_TMDB_API_URL }}
           VITE_TMDB_API_IMAGE_URL: ${{ secrets.VITE_TMDB_API_IMAGE_URL }}
-      - uses: actions/deploy-pages@v4
 
       - uses: actions/configure-pages@v4
 
@@ -29,4 +38,5 @@ jobs:
           path: dist
 
       - name: Deploy
+        id: deployment
         uses: actions/deploy-pages@v4
