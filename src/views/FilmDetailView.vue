@@ -4,6 +4,7 @@ import { ref, computed, watch } from 'vue'
 import { useFavoriteStore } from '@/stores/favoriteStore'
 import { getFilmDetails, getSimilarFilms } from '@/services/tmdbService.js'
 import FilmCard from '@/components/FilmCard.vue'
+import FilmGrid from '@/components/FilmGrid.vue'
 
 const props = defineProps({
   mediaType: {
@@ -86,6 +87,11 @@ watch(
   (id) => loadFilm(id),
   { immediate: true },
 )
+
+function goToDetail(f) {
+  const type = f.media_type === 'tv' ? 'tv' : 'film'
+  router.push(`/${type}/${f.id}`)
+}
 </script>
 
 <template>
@@ -145,13 +151,7 @@ watch(
             <a v-if="film.homepage" class="btn-primary" :href="film.homepage" target="_blank">
               Site officiel ↗
             </a>
-            <a
-              class="btn-primary"
-              :href="tmdbLink"
-              target="_blank"
-            >
-              Voir sur TMDB ↗
-            </a>
+            <a class="btn-primary" :href="tmdbLink" target="_blank"> Voir sur TMDB ↗ </a>
             <button class="btn-secondary" @click="toggleFavorite">
               {{ favoriteStore.isFavorite(film.id) ? '❤️ Retirer' : '♡ Favoris' }}
             </button>
@@ -164,7 +164,7 @@ watch(
       <div v-if="isLoading" class="state-msg">Chargement...</div>
       <div v-else-if="similarFilms.length === 0" class="state-msg">Aucun film similaire.</div>
       <div v-else class="films-list">
-        <FilmCard v-for="f in similarFilms" :key="f.id" :film="f" />
+        <FilmGrid :films="similarFilms" :isLoading="isLoading" @film-click="goToDetail($event)" />
       </div>
     </div>
   </main>

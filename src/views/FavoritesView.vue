@@ -7,13 +7,17 @@ import {
   getRecommendationsFromFavorites,
   MOVIE_GENRES,
 } from '@/services/tmdbService.js'
+import FilmGrid from '@/components/FilmGrid.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const favoriteStore = useFavoriteStore()
 const films = ref([])
 const isLoading = ref(false)
 const suggestions = ref([])
 const isSuggestionsLoading = ref(false)
 const topGenreNames = ref([])
+const error = ref(null)
 
 // Films favoris déjà chargés → leurs IDs pour exclure des suggestions
 const favoriteIds = computed(() => favoriteStore.favorites)
@@ -26,8 +30,8 @@ async function loadFavorites(ids) {
   isLoading.value = true
   try {
     films.value = await Promise.all(ids.map((id) => getFilmDetails(id)))
-  } catch (error) {
-    console.error('Erreur lors du chargement des films favoris :', error)
+  } catch (err) {
+    error.value = err
     films.value = []
   } finally {
     isLoading.value = false
@@ -82,6 +86,11 @@ const suggestionLabel = computed(() => {
     return `Parce que vous aimez ${topGenreNames.value.join(' & ')}`
   return 'Suggestions populaires'
 })
+
+function goToDetail(f) {
+  const type = f.media_type === 'tv' ? 'tv' : 'film'
+  router.push(`/${type}/${f.id}`)
+}
 </script>
 
 <template>
@@ -99,7 +108,12 @@ const suggestionLabel = computed(() => {
           >
         </p>
         <div class="films-list">
-          <FilmCard v-for="film in films" :key="film.id" :film="film" />
+          <FilmGrid
+            :films="films"
+            :isLoading="isLoading"
+            :error="error"
+            @film-click="goToDetail($event)"
+          />
         </div>
       </template>
     </div>
@@ -117,7 +131,11 @@ const suggestionLabel = computed(() => {
         Aucune suggestion disponible.
       </div>
       <div v-else class="films-list">
-        <FilmCard v-for="film in suggestions" :key="film.id" :film="film" />
+        <FilmGrid
+          :films="suggestions"
+          :isLoading="isSuggestionsLoading"
+          @film-click="goToDetail($event)"
+        />
       </div>
     </div>
   </main>
