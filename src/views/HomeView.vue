@@ -28,7 +28,11 @@ async function load(fetchFn) {
 async function search({ query, mediaType, genreIds, decade, language, minRating, sort }) {
   searchQuery.value = query
   hasActiveFilters.value =
-    mediaType || genreIds?.length > 0 || decade || language || minRating !== null
+    mediaType !== null ||
+    genreIds?.length > 0 ||
+    decade !== null ||
+    language !== null ||
+    minRating !== null
 
   if (query) {
     // Recherche textuelle → /search/multi (ignore les filtres discover)
@@ -77,7 +81,13 @@ function goToDetail(f) {
       <SearchBar @search="search" />
       <span class="results-count">{{ resultsLabel }}</span>
     </div>
-    <FilmGrid :films="films" :isLoading="isLoading" :error="error" :searchQuery="searchQuery" @film-click="goToDetail($event)" />
+    <FilmGrid
+      :films="films"
+      :isLoading="isLoading"
+      :error="error"
+      :searchQuery="searchQuery"
+      @film-click="goToDetail($event)"
+    />
   </main>
 </template>
 
