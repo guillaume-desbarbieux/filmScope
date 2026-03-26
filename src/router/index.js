@@ -15,6 +15,13 @@ const router = createRouter({
       path: '/film/:id',
       name: 'film-detail',
       component: FilmDetailView,
+      props: { mediaType: 'movie' },
+    },
+    {
+      path: '/tv/:id',
+      name: 'tv-detail',
+      component: FilmDetailView,
+      props: { mediaType: 'tv' },
     },
     {
       path: '/favorites',

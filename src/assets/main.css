@@ -10,6 +10,16 @@
   --c-muted: rgba(240,237,232,0.45);
 }
 
+:root.light {
+  --c-bg: #f5f3ef;
+  --c-surface: #ffffff;
+  --c-border: rgba(0,0,0,0.10);
+  --c-amber: #c47f10;
+  --c-amber-dim: rgba(196,127,16,0.12);
+  --c-text: #1a1a1e;
+  --c-muted: rgba(26,26,30,0.50);
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--c-bg); color: var(--c-text); font-family: 'DM Sans', sans-serif; }
 

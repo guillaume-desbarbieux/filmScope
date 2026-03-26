@@ -3,7 +3,14 @@ import { useRoute, useRouter } from 'vue-router'
 import { ref, computed, watch } from 'vue'
 import { useFavoriteStore } from '@/stores/favoriteStore'
 import { getFilmDetails, getSimilarFilms } from '@/services/tmdbService.js'
-import FilmCard from '@/components/FilmCard.vue'
+import FilmGrid from '@/components/FilmGrid.vue'
+
+const props = defineProps({
+  mediaType: {
+    type: String,
+    default: 'movie',
+  },
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -36,6 +43,12 @@ const ratingFormatted = computed(() => {
   return r != null ? r.toFixed(1) : null
 })
 
+const tmdbLink = computed(() => {
+  if (!film.value) return null
+  const type = props.mediaType === 'tv' ? 'tv' : 'movie'
+  return `https://www.themoviedb.org/${type}/${film.value.id}`
+})
+
 function formatMoney(n) {
   if (!n) return null
   return new Intl.NumberFormat('fr-FR', {
@@ -51,7 +64,10 @@ async function loadFilm(id) {
   film.value = null
   similarFilms.value = []
   try {
-    const [filmData, similarData] = await Promise.all([getFilmDetails(id), getSimilarFilms(id)])
+    const [filmData, similarData] = await Promise.all([
+      getFilmDetails(id, props.mediaType),
+      getSimilarFilms(id, props.mediaType),
+    ])
     film.value = filmData
     similarFilms.value = similarData
   } catch (e) {
@@ -70,6 +86,11 @@ watch(
   (id) => loadFilm(id),
   { immediate: true },
 )
+
+function goToDetail(f) {
+  const type = f.media_type === 'tv' ? 'tv' : 'film'
+  router.push(`/${type}/${f.id}`)
+}
 </script>
 
 <template>
@@ -129,13 +150,7 @@ watch(
             <a v-if="film.homepage" class="btn-primary" :href="film.homepage" target="_blank">
               Site officiel ↗
             </a>
-            <a
-              class="btn-primary"
-              :href="`https://www.themoviedb.org/movie/${film.id}`"
-              target="_blank"
-            >
-              Voir sur TMDB ↗
-            </a>
+            <a class="btn-primary" :href="tmdbLink" target="_blank"> Voir sur TMDB ↗ </a>
             <button class="btn-secondary" @click="toggleFavorite">
               {{ favoriteStore.isFavorite(film.id) ? '❤️ Retirer' : '♡ Favoris' }}
             </button>
@@ -148,7 +163,7 @@ watch(
       <div v-if="isLoading" class="state-msg">Chargement...</div>
       <div v-else-if="similarFilms.length === 0" class="state-msg">Aucun film similaire.</div>
       <div v-else class="films-list">
-        <FilmCard v-for="f in similarFilms" :key="f.id" :film="f" />
+        <FilmGrid :films="similarFilms" :isLoading="isLoading" @film-click="goToDetail($event)" />
       </div>
     </div>
   </main>
