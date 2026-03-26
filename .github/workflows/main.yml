@@ -28,8 +28,8 @@ jobs:
       - run: npm run build
         env:
           VITE_TMDB_API_KEY: ${{ secrets.VITE_TMDB_API_KEY }}
-          VITE_TMDB_API_URL: ${{ secrets.VITE_TMDB_API_URL }}
-          VITE_TMDB_API_IMAGE_URL: ${{ secrets.VITE_TMDB_API_IMAGE_URL }}
+          VITE_TMDB_API_URL: ${{ secrets.VITE_TMDB_BASE_URL }}
+          VITE_TMDB_API_IMAGE_URL: ${{ secrets.VITE_TMDB_IMAGE_URL }}
 
       - uses: actions/configure-pages@v4
 
