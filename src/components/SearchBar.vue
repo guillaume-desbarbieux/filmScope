@@ -409,7 +409,7 @@ input::placeholder {
   border-color: rgba(232, 160, 48, 0.5);
 }
 .filter-select option {
-  background: #16161a;
+  background: var(--c-surface);
 }
 
 .filter-footer {

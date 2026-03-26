@@ -21,7 +21,8 @@ function toggleFavorite() {
   favoriteStore.toggleFavorite(props.film.id)
 }
 function goToDetail() {
-  router.push(`/film/${props.film.id}`)
+  const type = props.film.media_type === 'tv' ? 'tv' : 'film'
+  router.push(`/${type}/${props.film.id}`)
 }
 </script>
 

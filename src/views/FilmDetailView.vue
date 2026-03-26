@@ -5,6 +5,13 @@ import { useFavoriteStore } from '@/stores/favoriteStore'
 import { getFilmDetails, getSimilarFilms } from '@/services/tmdbService.js'
 import FilmCard from '@/components/FilmCard.vue'
 
+const props = defineProps({
+  mediaType: {
+    type: String,
+    default: 'movie',
+  },
+})
+
 const route = useRoute()
 const router = useRouter()
 const favoriteStore = useFavoriteStore()
@@ -36,6 +43,12 @@ const ratingFormatted = computed(() => {
   return r != null ? r.toFixed(1) : null
 })
 
+const tmdbLink = computed(() => {
+  if (!film.value) return null
+  const type = props.mediaType === 'tv' ? 'tv' : 'movie'
+  return `https://www.themoviedb.org/${type}/${film.value.id}`
+})
+
 function formatMoney(n) {
   if (!n) return null
   return new Intl.NumberFormat('fr-FR', {
@@ -51,7 +64,10 @@ async function loadFilm(id) {
   film.value = null
   similarFilms.value = []
   try {
-    const [filmData, similarData] = await Promise.all([getFilmDetails(id), getSimilarFilms(id)])
+    const [filmData, similarData] = await Promise.all([
+      getFilmDetails(id, props.mediaType),
+      getSimilarFilms(id, props.mediaType),
+    ])
     film.value = filmData
     similarFilms.value = similarData
   } catch (e) {
@@ -131,7 +147,7 @@ watch(
             </a>
             <a
               class="btn-primary"
-              :href="`https://www.themoviedb.org/movie/${film.id}`"
+              :href="tmdbLink"
               target="_blank"
             >
               Voir sur TMDB ↗

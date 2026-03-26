@@ -68,9 +68,10 @@ export async function getPopularFilms() {
   return data.results.map(mapFilm)
 }
 
-export async function getFilmDetails(id) {
-  const { data } = await api.get(`/movie/${id}`)
-  return mapFilmDetails(data)
+export async function getFilmDetails(id, mediaType = 'movie') {
+  const endpoint = mediaType === 'tv' ? `/tv/${id}` : `/movie/${id}`
+  const { data } = await api.get(endpoint)
+  return mapFilmDetails({ ...data, media_type: mediaType })
 }
 
 export async function searchFilms(query) {
@@ -78,9 +79,10 @@ export async function searchFilms(query) {
   return data.results.filter((r) => r.media_type === 'movie' || r.media_type === 'tv').map(mapFilm)
 }
 
-export async function getSimilarFilms(id) {
-  const { data } = await api.get(`/movie/${id}/similar`)
-  return data.results.map(mapFilm)
+export async function getSimilarFilms(id, mediaType = 'movie') {
+  const endpoint = mediaType === 'tv' ? `/tv/${id}/similar` : `/movie/${id}/similar`
+  const { data } = await api.get(endpoint)
+  return data.results.map((r) => mapFilm({ ...r, media_type: mediaType }))
 }
 
 export async function getBestRatedFilms() {
