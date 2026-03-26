@@ -18,6 +18,7 @@ const selectedGenreIds = ref([])
 const selectedDecade = ref(null)
 const selectedLanguage = ref(null)
 const selectedMinRating = ref(null)
+const selectedSort = ref('rating.desc')
 
 let debounceTimer = null
 
@@ -87,6 +88,7 @@ function emitSearch() {
     decade: selectedDecade.value ? DECADES.find((d) => d.value === selectedDecade.value) : null,
     language: selectedLanguage.value,
     minRating: selectedMinRating.value,
+    sort: selectedSort.value,
   })
 }
 
@@ -196,6 +198,15 @@ watch([selectedDecade, selectedLanguage, selectedMinRating], () => emitSearch())
         </div>
       </div>
     </transition>
+  </div>
+
+  <div class="filter-group" :class="{ active: true }">
+    <span class="filter-label">Trier par</span>
+    <select v-model="selectedSort" class="filter-select" @change="emitSearch">
+      <option value="rating">Note</option>
+      <option value="year">Année</option>
+      <option value="title">Titre</option>
+    </select>
   </div>
 </template>
 

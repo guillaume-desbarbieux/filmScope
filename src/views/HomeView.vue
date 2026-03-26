@@ -23,14 +23,14 @@ async function load(fetchFn) {
   }
 }
 
-async function search({ query, mediaType, genreIds, decade, language, minRating }) {
+async function search({ query, mediaType, genreIds, decade, language, minRating, sort }) {
   searchQuery.value = query
   hasActiveFilters.value =
     mediaType || genreIds?.length > 0 || decade || language || minRating !== null
 
   if (query) {
     // Recherche textuelle → /search/multi (ignore les filtres discover)
-    await load(() => searchFilms(query))
+   await load(() => searchFilms(query))
     resultsLabel.value = `${films.value.length} résultat${films.value.length !== 1 ? 's' : ''} pour « ${query} »`
   } else if (hasActiveFilters.value) {
     // Filtres sans texte → /discover
@@ -49,6 +49,13 @@ async function search({ query, mediaType, genreIds, decade, language, minRating 
     await load(getPopularFilms)
     resultsLabel.value = `${films.value.length} films populaires`
   }
+
+  films.value.sort((a, b) => {
+    if (sort === 'rating') return b.rating - a.rating
+    if (sort === 'year') return b.year - a.year
+    if (sort === 'title') return a.title.localeCompare(b.title)
+    return 0
+  })
 }
 
 onMounted(async () => {
