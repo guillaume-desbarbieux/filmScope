@@ -37,7 +37,7 @@ nav {
   justify-content: space-between;
   padding: 1.1rem 2rem;
   border-bottom: 0.5px solid var(--c-border);
-  background: rgba(13, 13, 15, 0.92);
+  background: color-mix(in srgb, var(--c-bg) 92%, transparent);
   backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
@@ -83,7 +83,9 @@ a.router-link-active {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
   flex-shrink: 0;
 }
 .theme-btn:hover {
