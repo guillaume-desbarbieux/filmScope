@@ -28,7 +28,7 @@ async function loadFavorites(ids) {
   }
   isLoading.value = true
   try {
-    films.value = await Promise.all(ids.map((id) => getFilmDetails(id)))
+    films.value = await Promise.all(ids.map((entry) => getFilmDetails(entry.id, entry.mediaType)))
   } catch (err) {
     error.value = err
     films.value = []
@@ -43,7 +43,8 @@ async function loadSuggestions(ids) {
     const raw = await getRecommendationsFromFavorites(ids)
 
     // Exclure les films déjà en favoris
-    const filtered = raw.filter((f) => !ids.includes(f.id))
+    const favoriteIdSet = new Set(ids.map((entry) => entry.id))
+    const filtered = raw.filter((f) => !favoriteIdSet.has(f.id))
     suggestions.value = filtered.slice(0, 20)
 
     // Calculer les genres dominants pour le label

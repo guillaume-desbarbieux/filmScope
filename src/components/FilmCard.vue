@@ -31,7 +31,7 @@ function emitClick(f) {
     <div class="poster-wrap">
       <img :src="film.poster_url" :alt="film.title" />
       <button class="fav-btn" @click.stop="toggleFavorite">
-        {{ favoriteStore.isFavorite(film.id) ? '❤️' : '🤍' }}
+        {{ favoriteStore.isFavorite(film) ? '❤️' : '🤍' }}
       </button>
     </div>
     <div class="card-body">

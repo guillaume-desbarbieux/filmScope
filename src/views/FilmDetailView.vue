@@ -78,7 +78,7 @@ async function loadFilm(id) {
 }
 
 function toggleFavorite() {
-  favoriteStore.toggleFavorite(film)
+  favoriteStore.toggleFavorite(film.value)
 }
 
 watch(
@@ -152,7 +152,7 @@ function goToDetail(f) {
             </a>
             <a class="btn-primary" :href="tmdbLink" target="_blank"> Voir sur TMDB ↗ </a>
             <button class="btn-secondary" @click="toggleFavorite">
-              {{ favoriteStore.isFavorite(film.id) ? '❤️ Retirer' : '♡ Favoris' }}
+              {{ favoriteStore.isFavorite(film) ? '❤️ Retirer' : '♡ Favoris' }}
             </button>
           </div>
         </div>
